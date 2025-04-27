@@ -1,13 +1,12 @@
 {
-    
     "version": 2,
     "buildCommand": "npm run build",
-    "installCommand": "npm install --production",
+    "installCommand": "npm install",
     "outputDirectory": "dist",
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "dist/main.js"
+        "dest": "/dist/main.js"
       }
     ]
   }
