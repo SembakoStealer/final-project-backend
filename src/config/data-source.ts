@@ -1,18 +1,20 @@
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
-import * as dotenv from 'dotenv';
-import { User } from '../user/user.entity';
-import { Category } from '../category/category.entity';
-import { Product } from '../product/product.entity';
 
-dotenv.config();
+ConfigModule.forRoot();
+const configService = new ConfigService();
 
-const AppDataSource = new DataSource({
+export default new DataSource({
   type: 'postgres',
-  url: process.env.DATABASE_URL, // ✅ Use connection string
-  entities: [User, Category, Product],
-  migrations: ['dist/migrations/*.js'],
-  synchronize: false,
-  ssl: true, // ✅ Required by Neon
+  host: configService.get<string>('POSTGRES_HOST'),
+  port: configService.get<string>('POSTGRES_PORT')
+    ? configService.get<number>('POSTGRES_PORT')
+    : 5432,
+  password: configService.get<string>('POSTGRES_PASSWORD'),
+  username: configService.get<string>('POSTGRES_USER'),
+  database: configService.get<string>('POSTGRES_DATABASE'),
+  migrations: ['src/migrations/**/*{.ts,.js}'],
+  migrationsRun: false,
+  logging: true,
+  ssl: true
 });
-
-export default AppDataSource;
