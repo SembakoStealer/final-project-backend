@@ -9,7 +9,7 @@ async function bootstrap() {
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle('Simple Social Media API')
+    .setTitle('E-commerce Catalog Manager')
     .addBearerAuth()
     .addSecurityRequirements('bearer')
     .build();
