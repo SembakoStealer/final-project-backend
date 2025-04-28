@@ -9,11 +9,12 @@ async function bootstrap() {
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle('E-commerce Catalog Manager')
+    .setTitle('E-commerce Catalog Managerq')
     .addBearerAuth()
     .addSecurityRequirements('bearer')
     .build();
   const document = SwaggerModule.createDocument(app, config);
+
   // Serve raw OpenAPI JSON
   app.use('/api/swagger-json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
@@ -45,7 +46,13 @@ async function bootstrap() {
     `);
   });
 
-  app.useGlobalPipes(new ValidationPipe());
+  // 🔥 Updated ValidationPipe
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }));
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
