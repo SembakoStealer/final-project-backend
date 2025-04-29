@@ -15,6 +15,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -38,6 +39,7 @@ export class ProductsController {
   @Get()
   @ApiOperation({ summary: 'Get all products or filter by category' })
   @ApiResponse({ status: 200, description: 'Return all products or products by category.' })
+  @ApiQuery({ name: 'categoryId', required: false, type: Number })
   async findAll(@Query('categoryId') categoryId?: number): Promise<Product[]> {
     if (categoryId) {
       return this.productsService.findByCategory(categoryId);
