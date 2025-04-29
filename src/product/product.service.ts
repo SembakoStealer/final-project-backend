@@ -31,6 +31,17 @@ export class ProductsService {
     });
   }
 
+  async findByCategory(categoryId: number): Promise<Product[]> {
+    // First verify the category exists
+    await this.categoriesService.findOne(categoryId);
+    
+    // Then find products with that category
+    return this.productsRepository.find({
+      where: { category: { id: categoryId } },
+      relations: ['category'],
+    });
+  }
+
   async findOne(id: number): Promise<Product> {
     const product = await this.productsRepository.findOne({
       where: { id },

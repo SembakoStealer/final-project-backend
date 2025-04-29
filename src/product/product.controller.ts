@@ -1,9 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { ProductsService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Product } from './product.entity';
 
 @ApiTags('products')
 @Controller('products')
@@ -20,9 +36,12 @@ export class ProductsController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all products' })
-  @ApiResponse({ status: 200, description: 'Return all products.' })
-  findAll() {
+  @ApiOperation({ summary: 'Get all products or filter by category' })
+  @ApiResponse({ status: 200, description: 'Return all products or products by category.' })
+  async findAll(@Query('categoryId') categoryId?: number): Promise<Product[]> {
+    if (categoryId) {
+      return this.productsService.findByCategory(categoryId);
+    }
     return this.productsService.findAll();
   }
 
