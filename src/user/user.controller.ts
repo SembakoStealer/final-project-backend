@@ -1,11 +1,10 @@
-import { Body, Controller, Get, Logger, NotFoundException, Param, Patch, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Logger, NotFoundException, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { JwtPayloadDto } from 'src/auth/dto/jwt-payload.dto';
 import { User } from './user.entity';
 import { ProfileDTO } from './profile.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -30,15 +29,5 @@ export class UserController {
       created_at: user.createdAt,
       updated_at: user.updatedAt,
     };
-  }
-
-  @Patch(':id')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update user information' })
-  @ApiResponse({ status: 200, description: 'User information updated successfully.' })
-  @ApiResponse({ status: 404, description: 'User not found.' })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
   }
 }
